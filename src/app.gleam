@@ -15,6 +15,7 @@ pub fn main() {
   let secret_key_base = wisp.random_string(64)
 
   // Get credentials from .envrc
+  let assert Ok(database_host) = envoy.get("DATABASE_HOST")
   let assert Ok(database_name) = envoy.get("DATABASE_NAME")
   let assert Ok(database_user) = envoy.get("POSTGRES_USER")
   let database_password =
@@ -26,7 +27,7 @@ pub fn main() {
     pgo.connect(
       pgo.Config(
         ..pgo.default_config(),
-        host: "localhost",
+        host: database_host,
         user: database_user,
         password: database_password,
         database: database_name,
@@ -35,7 +36,7 @@ pub fn main() {
     )
 
   // Create the context to hold the database connections
-  let ctx = Context(db: db)
+  let ctx = Context(db: db, static_directory: static_directory())
 
   // Create the request handler using our context
   let handler = router.handle_request(_, ctx)
@@ -49,4 +50,9 @@ pub fn main() {
     |> mist.start_http
 
   process.sleep_forever()
+}
+
+pub fn static_directory() -> String {
+  let assert Ok(priv_directory) = wisp.priv_directory("app")
+  priv_directory <> "/static"
 }

@@ -3,7 +3,7 @@ import app/web/components/icons.{
 }
 import gleam/order.{Eq}
 import gleam/string
-import lustre/attribute.{class, href, src}
+import lustre/attribute.{attribute, class, href, src}
 import lustre/element.{type Element, element, text}
 import lustre/element/html.{
   a, body, div, h1, head, hr, html, li, main, p, script, title, ul,
@@ -12,10 +12,21 @@ import wisp.{type Request, type Response}
 
 pub fn admin_layout(req: Request, children: Element(a)) -> Response {
   let html =
-    html([], [
-      head([], [
-        script([src("https://cdn.tailwindcss.com")], ""),
-        title([], "PriceFlow Admin"),
+    html.html([attribute("lang", "en")], [
+      html.head([], [
+        html.meta([attribute.attribute("charset", "UTF-8")]),
+        html.meta([
+          attribute.attribute("name", "viewport"),
+          attribute.attribute(
+            "content",
+            "width=device-width, initial-scale=1.0",
+          ),
+        ]),
+        html.title([], "Priceflow Admin"),
+        html.link([
+          attribute.rel("stylesheet"),
+          attribute.href("/static/style.css"),
+        ]),
       ]),
       body(
         [

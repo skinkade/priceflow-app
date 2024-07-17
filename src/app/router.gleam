@@ -4,7 +4,7 @@ import app/web/admin/organizations as admin_organizations_handler
 import wisp.{type Request, type Response}
 
 pub fn handle_request(req: Request, ctx: Context) -> Response {
-  use req <- middleware(req)
+  use req <- middleware(req, ctx)
 
   case wisp.path_segments(req) {
     ["admin", "organizations", "new"] -> admin_organizations_handler.new(req)
